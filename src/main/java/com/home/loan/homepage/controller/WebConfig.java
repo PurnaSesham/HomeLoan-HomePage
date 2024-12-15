@@ -1,19 +1,26 @@
 package com.home.loan.homepage.controller;
+
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer
-{
-@Override
-public void addCorsMappings (CorsRegistry registry) {
+public class WebConfig {
 
- registry.addMapping("/**")
-	.allowedOrigins("http://localhost:3000") // React's default port
-	.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow specific methods
-	.allowedHeaders("*") // Allow all headers
-	.allowCredentials(true)
-	.maxAge(3600); // Allow credentials (e.g., cookies, authorization headers)
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000"); // React app origin
+        configuration.addAllowedMethod("*"); // Allow all HTTP methods (GET, POST, etc.)
+        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.setAllowCredentials(true); // Allow credentials (cookies, auth headers)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply CORS to all endpoints
+        return source;
+    }
 }
-}
+
